@@ -27,12 +27,12 @@ import {
   QuestAnalyticsQueryDto,
   UserAnalyticsQueryDto,
 } from './dto/analytics-query.dto';
-import { UserRole } from '../users/entities/user.entity';
+import { Role } from '../../common/enums/role.enum';
 
 @ApiTags('Analytics')
 @Controller('analytics')
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserRole.ADMIN)
+@Roles(Role.ADMIN)
 @ApiBearerAuth()
 @RateLimit({ limit: 30, ttlSeconds: 60 })
 export class AnalyticsController {

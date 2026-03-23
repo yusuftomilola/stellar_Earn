@@ -10,12 +10,12 @@ import { Quest } from './entities/quest.entity';
 import { Submission } from './entities/submission.entity';
 import { Payout } from './entities/payout.entity';
 import { AnalyticsSnapshot } from './entities/analytics-snapshot.entity';
-import { User } from '../users/entities/user.entity';
+import { User as AnalyticsUser } from './entities/user.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      User,
+      AnalyticsUser,
       Quest,
       Submission,
       Payout,

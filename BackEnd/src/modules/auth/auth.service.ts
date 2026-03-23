@@ -21,12 +21,12 @@ import {
   ChallengeResponseDto,
 } from './dto/auth.dto';
 import * as crypto from 'crypto';
-import { UserRole } from '../users/entities/user.entity';
+import { Role } from '../../common/enums/role.enum';
 
 export interface AuthUser {
   id: string;
   stellarAddress: string;
-  role: UserRole;
+  role: Role;
 }
 
 @Injectable()
@@ -92,7 +92,7 @@ export class AuthService {
    */
   async generateTokens(
     stellarAddress: string,
-    role: UserRole,
+    role: Role,
   ): Promise<{
     accessToken: string;
     refreshToken: string;
@@ -203,7 +203,7 @@ export class AuthService {
   /**
    * Get role for a Stellar address based on configuration
    */
-  private getRoleForAddress(stellarAddress: string): UserRole {
+  private getRoleForAddress(stellarAddress: string): Role {
     const adminAddresses = this.configService
       .get<string>('ADMIN_ADDRESSES', '')
       .split(',')
@@ -211,8 +211,8 @@ export class AuthService {
       .filter((addr) => addr.length > 0);
 
     return adminAddresses.includes(stellarAddress)
-      ? UserRole.ADMIN
-      : UserRole.USER;
+      ? Role.ADMIN
+      : Role.USER;
   }
 
   /**
@@ -220,7 +220,7 @@ export class AuthService {
    */
   private mapToUserResponse(
     stellarAddress: string,
-    role: UserRole,
+    role: Role,
   ): UserResponseDto {
     return {
       stellarAddress,

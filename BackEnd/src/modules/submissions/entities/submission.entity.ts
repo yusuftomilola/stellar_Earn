@@ -7,8 +7,6 @@ import {
   UpdateDateColumn,
   JoinColumn,
 } from 'typeorm';
-import { Quest } from '../../quests/entities/quest.entity';
-import { User } from '../../users/entities/user.entity';
 
 export enum SubmissionStatus {
   PENDING = 'PENDING',
@@ -59,11 +57,11 @@ export class Submission {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.submissions)
+  @ManyToOne('User', 'submissions')
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
-  user: User;
+  user: any;
 
-  @ManyToOne(() => Quest, (quest) => quest.submissions)
+  @ManyToOne('Quest', 'submissions')
   @JoinColumn({ name: 'questId', referencedColumnName: 'id' })
-  quest: Quest;
+  quest: any;
 }

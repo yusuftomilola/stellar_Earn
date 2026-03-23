@@ -27,7 +27,8 @@ import { RolesGuard } from '../../modules/auth/guards/roles.guard';
 import { SearchUsersDto } from './dto/search-users.dto';
 import { UpdateProfileDto } from './dto/update.dto';
 import { UsersService } from './user.service';
-import { User, UserRole } from './entities/user.entity';
+import { User } from './entities/user.entity';
+import { Role } from '../../common/enums/role.enum';
 import { Roles } from '../auth/decorators/roles.decorator';
 
 @ApiTags('users')
@@ -124,14 +125,14 @@ export class UsersController {
 
   @Get('admins/list')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(Role.ADMIN)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all admin users (Admin only)' })
   @ApiResponse({ status: 200, description: 'Admins retrieved' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async getAdmins() {
-    return this.usersService.getUsersByRole(UserRole.ADMIN);
+    return this.usersService.getUsersByRole(Role.ADMIN);
   }
 
   @Delete(':address')

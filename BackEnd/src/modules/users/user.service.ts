@@ -17,7 +17,8 @@ import { Cache } from 'cache-manager';
 import { Repository, FindOptionsWhere, Like } from 'typeorm';
 import { SearchUsersDto } from './dto/search-users.dto';
 import { UpdateProfileDto } from './dto/update.dto';
-import { User, UserRole } from './entities/user.entity';
+import { User } from './entities/user.entity';
+import { Role } from '../../common/enums/role.enum';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { UserCreatedEvent } from '../../events/dto/user-created.event';
 import { UserUpdatedEvent } from '../../events/dto/user-updated.event';
@@ -441,7 +442,7 @@ export class UsersService {
     }
   }
 
-  async getUsersByRole(role: UserRole): Promise<User[]> {
+  async getUsersByRole(role: Role): Promise<User[]> {
     return this.usersRepository.find({
       where: { role },
       order: { createdAt: 'DESC' },
@@ -453,7 +454,7 @@ export class UsersService {
 
     // Only allow if requesting user is admin or deleting own account
     if (
-      requestingUser.role !== UserRole.ADMIN &&
+      requestingUser.role !== Role.ADMIN &&
       requestingUser.id !== userToDelete.id
     ) {
       throw new BadRequestException('You can only delete your own account');

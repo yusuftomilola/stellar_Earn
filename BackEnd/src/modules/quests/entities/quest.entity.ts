@@ -6,7 +6,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Submission } from '../../submissions/entities/submission.entity';
 
 @Entity('quests')
 export class Quest {
@@ -65,8 +64,8 @@ export class Quest {
   @Column({ type: 'timestamp', nullable: true })
   endDate: Date;
 
-  @OneToMany(() => Submission, (submission) => submission.quest)
-  submissions: Submission[];
+  @OneToMany('Submission', 'quest')
+  submissions: any[];
 
   // For compatibility with verification system
   verifiers: { id: string }[];
