@@ -2,11 +2,10 @@
 
 use soroban_sdk::{contract, contractimpl, Address, BytesN, Env, Symbol};
 
+mod admin;
 mod errors;
 mod escrow;
 mod init;
-mod admin;
-mod upgrade;
 mod payout;
 mod quest;
 mod reputation;
@@ -14,6 +13,7 @@ mod storage;
 mod submission;
 pub mod test;
 pub mod types;
+mod upgrade;
 
 use errors::Error;
 use init::ContractConfig;
@@ -233,7 +233,11 @@ impl EarnQuestContract {
     // ── Upgrade and Migration ──
 
     /// Upgrade the contract's WASM code and run any outstanding migrations (Admin only).
-    pub fn upgrade_contract(env: Env, admin: Address, new_wasm_hash: BytesN<32>) -> Result<(), Error> {
+    pub fn upgrade_contract(
+        env: Env,
+        admin: Address,
+        new_wasm_hash: BytesN<32>,
+    ) -> Result<(), Error> {
         admin::upgrade_contract(&env, admin, new_wasm_hash)
     }
 

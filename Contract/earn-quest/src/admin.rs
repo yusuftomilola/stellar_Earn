@@ -1,20 +1,20 @@
 use crate::errors::Error;
 use crate::init;
 use crate::upgrade;
-use soroban_sdk::{Env, Address, BytesN};
+use soroban_sdk::{Address, BytesN, Env};
 
 /// Upgrade the contract's WASM code and run any outstanding migrations.
 /// Only available to the contract administrator.
 pub fn upgrade_contract(env: &Env, admin: Address, new_wasm_hash: BytesN<32>) -> Result<(), Error> {
     // Verify admin privileges and authorize upgrade
     init::authorize_upgrade(env, admin)?;
-    
+
     // 1. Perform WASM update
     upgrade::upgrade_code(env, new_wasm_hash)?;
-    
+
     // 2. Perform state migration to current version
     upgrade::migrate(env)?;
-    
+
     Ok(())
 }
 

@@ -1,18 +1,18 @@
 use crate::errors::Error;
-use crate::storage;
 use crate::init::CONTRACT_VERSION;
-use soroban_sdk::{Env, BytesN};
+use crate::storage;
+use soroban_sdk::{BytesN, Env};
 
 /// Migrate state from current version to CONTRACT_VERSION
 pub fn migrate(env: &Env) -> Result<(), Error> {
     let mut current_version = storage::get_data_version(env);
-    
+
     // If not initialized (or no version set), start from 0 or 1.
     // Assuming 1 was initial version without explicit version storage key.
     if current_version == 0 && storage::is_initialized(env) {
         current_version = 1;
         storage::set_data_version(env, 1);
-        
+
         // Update version in config for consistency
         if let Some(mut config) = storage::get_config(env) {
             config.version = 1;
@@ -28,7 +28,7 @@ pub fn migrate(env: &Env) -> Result<(), Error> {
     for version in (current_version + 1)..=CONTRACT_VERSION {
         run_migration(env, version)?;
         storage::set_data_version(env, version);
-        
+
         // Update version in config for consistency
         if let Some(mut config) = storage::get_config(env) {
             config.version = version;
@@ -61,7 +61,7 @@ fn migrate_v1_to_v2(_env: &Env) -> Result<(), Error> {
 /// For simple additions, it might just be deleting data.
 pub fn rollback(env: &Env, target_version: u32) -> Result<(), Error> {
     let current_version = storage::get_data_version(env);
-    
+
     if target_version >= current_version {
         return Err(Error::InvalidVersionNumber);
     }
