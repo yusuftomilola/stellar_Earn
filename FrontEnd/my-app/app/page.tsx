@@ -1,5 +1,7 @@
 "use client";
 
+import FeaturedQuests from "@/components/homepage/FeaturedQuests";
+
 export default function Home() {
   return (
     <div className="flex min-h-[calc(100vh-10rem)] items-center justify-center">
@@ -16,6 +18,9 @@ export default function Home() {
             trail and unlocking higher-value opportunities.
           </p>
         </div>
+        <div>
+          <FeaturedQuests />
+          </div>
       </main>
     </div>
   );
