@@ -1,6 +1,7 @@
 import { Controller, Get, Header, Res } from '@nestjs/common';
 import { HealthCheck, HealthCheckService } from '@nestjs/terminus';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiVersion } from '../../common/decorators/api-version.decorator';
 import { Response } from 'express';
 import { DatabaseIndicator } from './indicators/database.indicator';
 import { RedisIndicator } from './indicators/redis.indicator';
@@ -9,6 +10,9 @@ import { SkipLogging } from '../../common/interceptors/logging.interceptor';
 
 @ApiTags('Health')
 @Controller('health')
+@ApiVersion(['1', '2'], {
+  deprecated: false,
+})
 export class HealthController {
   constructor(
     private readonly health: HealthCheckService,

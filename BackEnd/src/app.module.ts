@@ -2,10 +2,12 @@ import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ApiVersionGuard } from './common/guards/versioning.guard';
+import { VersioningInterceptor } from './common/interceptors/versioning.interceptor';
 
 import { WebhooksModule } from './modules/webhooks/webhooks.module';
 import { AuthModule } from './modules/auth/auth.module';
@@ -76,6 +78,14 @@ import { CsrfGuard } from './common/guards/csrf.guard';
     {
       provide: APP_GUARD,
       useClass: CsrfGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ApiVersionGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: VersioningInterceptor,
     },
   ],
 })

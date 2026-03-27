@@ -1,6 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import {
+  API_VERSION_CONFIG,
+  extractApiVersion,
+} from './config/versioning.config';
 import { WinstonModule } from 'nest-winston';
 import * as express from 'express';
 import { setupSwagger } from './config/swagger.config';
@@ -105,7 +109,13 @@ async function bootstrap() {
     logger.log('Security middleware and pipes configured', 'Bootstrap');
 
     app.setGlobalPrefix('api');
-    app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
+    app.enableVersioning({
+      type: VersioningType.CUSTOM,
+      defaultVersion: API_VERSION_CONFIG.defaultVersion,
+      extractor: (request) => {
+        return extractApiVersion(request as any) || API_VERSION_CONFIG.defaultVersion;
+      },
+    });
 
     setupSwagger(app, configService);
 
