@@ -20,6 +20,7 @@ import { JobsModule } from './modules/jobs/jobs.module';
 import { EmailModule } from './modules/email/email.module';
 import { UsersModule } from './modules/users/users.module';
 import { ModerationModule } from './modules/moderation/moderation.module';
+import { WebsocketModule } from './modules/websocket/websocket.module';
 
 import { dataSourceOptions } from './database/data-source';
 import moderationConfig from './config/moderation.config';
@@ -66,6 +67,7 @@ import { CsrfGuard } from './common/guards/csrf.guard';
     EmailModule,
     UsersModule,
     ModerationModule,
+    WebsocketModule,
   ],
   controllers: [AppController],
   providers: [
